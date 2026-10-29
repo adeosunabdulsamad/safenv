@@ -1,11 +1,18 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
 [project]
-name = "Safenv Module"
+name = "Safenv"
+version = "1.0.0"
 description = "A python module to ensure safety of API keys and other secrets in your project folder"
 readme = "README.md"
-version = 1.0.0
-dependencies = []
 requires-python = ">=3.4"
-authors = [{name = "Adeosun Abdulsamad", email = "adeosunabdulsamad25@gmail.com}]
-license = "MIT"
+license = { text = "MIT" }
+authors = [
+    { name = "Adeosun Abdulsamad", email = "adeosunabdulsamad25@gmail.com" }
+]
+dependencies = []
 
-[project-urls]
+[project.urls]
+Homepage = "https://github.com"
