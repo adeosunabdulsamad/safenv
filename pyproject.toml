@@ -1,0 +1,11 @@
+[project]
+name = "Safenv Module"
+description = "A python module to ensure safety of API keys and other secrets in your project folder"
+readme = "README.md"
+version = 1.0.0
+dependencies = []
+requires-python = ">=3.4"
+authors = [{name = "Adeosun Abdulsamad", email = "adeosunabdulsamad25@gmail.com}]
+license = "MIT"
+
+[project-urls]
