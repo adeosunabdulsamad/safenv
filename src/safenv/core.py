@@ -5,9 +5,15 @@ app = typer.Typer()
 p = Path('.')
 
 @app.command()
-def find_gitignore(gitignores):
-    """
-    Checks if there is a gitignore file in the project folder
+def find_gitignore(gitignores: list[str]):
+    """Check if there is a gitignore file in the project folder
+
+    Args:
+        gitignores (list[int]): A list of the gitignore files in the project folder
+
+    Returns:
+        has_gitignore (bool): True if the folder has a gitignore file(s), else False
+        no_of_gitignores: Total number of gitignore files found in project folder
     """
     if len(gitignores) < 1:
         print("Error: There is no gitignore file in this project folder")
@@ -19,17 +25,38 @@ def find_gitignore(gitignores):
         print("Pass: There is a gitignore file present")
         return [True, 1]
 
+def append_text(path: Path,text: str):
+    """Add files that git should ignore if there is already a gitignore file present
+    
+    Args:
+        path (str): Realative path of the gitignore file
+        text (str): The file extension to add to the gitignore
+    """
+
+    with path.open("a", encoding="utf-8") as f:
+        f.write(text)
+
 @app.command()
-def find_env():
+def find_env(file_path: Path):
     """
-    Checks if there is a .env file in the project directory
+    Check if there is a .env file in the project directory
+
+    Args:
+        file_path (path): The path of the file that is being searched
+
+    Returns:
+        find_env (bool): True if .env is found in the file and false if not 
     """
-    pass
+    if ".env" in file_path.read_text(encoding="utf-8"):
+        print("There is already a .env file present in your gitignore file")
+        return True
+    print("There is no .env file present in your gitignore file")
+    return False
 
 @app.command()
 def read_gitignore():
     """
-    Checks if there is a .env file in the project directory
+    Check if there is a .env file in the project directory
     """
     pass
 
@@ -55,6 +82,15 @@ def safe_env():
     has_gitignore, no_of_gitignores = find_gitignore(gitignores)
     if not has_gitignore:
         create_gitignore()
+    elif no_of_gitignores == 1:
+        if find_env(gitignores[0]):
+            return
+        try:
+            append_text(gitignores[0], ".env\n")
+            print("Added .env to the file")
+        except Exception as e:
+            print(f"Error when trying to add .env: {e}")
+
     
 if __name__ == "__main__":
     app()
