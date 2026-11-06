@@ -3,16 +3,17 @@ requires = ["setuptools>=61.0"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "Safenv"
+name = "safenv"
 version = "1.0.0"
 description = "A python module to ensure safety of API keys and other secrets in your project folder"
 readme = "README.md"
-requires-python = ">=3.4"
+requires-python = ">=3.11"
 license = { text = "MIT" }
 authors = [
     { name = "Adeosun Abdulsamad", email = "adeosunabdulsamad25@gmail.com" }
 ]
-dependencies = []
-
+dependencies = [
+    "typer>=0.28.0",
+]
 [project.urls]
 Homepage = "https://github.com/adeosunabdulsamad/safenv"
