@@ -1,6 +1,10 @@
+import typer
 from pathlib import Path
 from sys import argv
+app = typer.Typer()
 p = Path('.')
+
+@app.command()
 def find_gitignore(gitignores):
     """
     Checks if there is a gitignore file in the project folder
@@ -15,18 +19,21 @@ def find_gitignore(gitignores):
         print("Pass: There is a gitignore file present")
         return [True, 1]
 
+@app.command()
 def find_env():
     """
     Checks if there is a .env file in the project directory
     """
     pass
 
+@app.command()
 def read_gitignore():
     """
     Checks if there is a .env file in the project directory
     """
     pass
 
+@app.command()
 def create_gitignore():
     """Create a gitignore file with .env in case no gitignore file presently"""
     try:
@@ -36,6 +43,7 @@ def create_gitignore():
     except Exception as e:
         print(f"Gitignore file was not created. Error is {e}")
 
+@app.command()
 def safe_env():
     """
     Python module for checking if you do not have any exposed api keys and your gitignore file includes .env
@@ -48,4 +56,5 @@ def safe_env():
     if not has_gitignore:
         create_gitignore()
     
-safe_env()
+if __name__ == "__main__":
+    app()
