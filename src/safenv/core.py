@@ -3,13 +3,11 @@ from pathlib import Path
 from sys import argv
 app = typer.Typer()
 p = Path('.')
+gitignores = list(p.glob('**/*.gitignore'))
 
 @app.command()
-def find_gitignore(gitignores: list[str]):
+def check_gitignore():
     """Check if there is a gitignore file in the project folder
-
-    Args:
-        gitignores (list[int]): A list of the gitignore files in the project folder
 
     Returns:
         has_gitignore (bool): True if the folder has a gitignore file(s), else False
@@ -53,12 +51,6 @@ def find_env(file_path: Path):
     print("There is no .env file present in your gitignore file")
     return False
 
-@app.command()
-def read_gitignore():
-    """
-    Check if there is a .env file in the project directory
-    """
-    pass
 
 @app.command()
 def create_gitignore():
@@ -75,11 +67,7 @@ def safe_env():
     """
     Python module for checking if you do not have any exposed api keys and your gitignore file includes .env
     """
-    gitignores = list(p.glob('**/*.gitignore'))
-    if len(argv) > 1 and argv[1] == "-h":
-        print("Here is all you need to know about this module")
-        return
-    has_gitignore, no_of_gitignores = find_gitignore(gitignores)
+    has_gitignore, no_of_gitignores = check_gitignore()
     if not has_gitignore:
         create_gitignore()
     elif no_of_gitignores == 1:
