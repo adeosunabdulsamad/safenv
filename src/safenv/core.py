@@ -2,7 +2,6 @@ import typer
 from pathlib import Path
 from typing import Annotated
 import urllib.request
-from sys import argv
 
 app = typer.Typer()
 p = Path(".")
@@ -184,7 +183,6 @@ def question():
         invalid_message="Please select a valid option from the list.",
         multicolumn_complete=True,
     ).execute()
-    print("\n")
     return gitignore_template
 
 
