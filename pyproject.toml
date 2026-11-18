@@ -13,6 +13,7 @@ authors = [
     { name = "Adeosun Abdulsamad", email = "adeosunabdulsamad25@gmail.com" }
 ]
 dependencies = [
+    "inquirerpy>=0.3.4",
     "typer>=0.28.0",
 ]
 [project.urls]
