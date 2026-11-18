@@ -1,15 +1,15 @@
 import typer
 from pathlib import Path
+from typing import Annotated
+import urllib.request
 from sys import argv
+
 app = typer.Typer()
-p = Path('.')
-gitignores = list(p.glob('**/*.gitignore'))
+p = Path(".")
+gitignores = list(p.glob("**/*.gitignore"))
 from InquirerPy import inquirer
 
-def question():
-    gitignore_template = inquirer.text(
-        message= "What language is your project running on:",
-        completer= {
+options = {
     "AL": None,
     "Actionscript": None,
     "Ada": None,
@@ -173,10 +173,20 @@ def question():
     "ecu.test": None,
     "esp-idf": None,
     "ros2": None,
-},
-    multicolumn_complete=True).execute()
-    print(gitignore_template)
+}
+
+
+def question():
+    gitignore_template = inquirer.text(
+        message="What language is your project running on:",
+        completer=options,
+        validate=lambda result: result in options,
+        invalid_message="Please select a valid option from the list.",
+        multicolumn_complete=True,
+    ).execute()
+    print("\n")
     return gitignore_template
+
 
 @app.command()
 def check_gitignore():
@@ -190,15 +200,18 @@ def check_gitignore():
         print("Error: There is no gitignore file in this project folder\n")
         return [False, 0]
     elif len(gitignores) > 1:
-        print("There are multiple gitignore files in this project folder. Run safenv -j to join the gitignore files to 1")
+        print(
+            "There are multiple gitignore files in this project folder. Run safenv -j to join the gitignore files to 1"
+        )
         return [True, len(gitignores)]
     else:
         print("Pass: There is a gitignore file present")
         return [True, 1]
 
-def append_text(path: Path,text: str):
+
+def append_text(path: Path, text: str):
     """Add files that git should ignore if there is already a gitignore file present
-    
+
     Args:
         path (str): Realative path of the gitignore file
         text (str): The file extension to add to the gitignore
@@ -207,8 +220,13 @@ def append_text(path: Path,text: str):
     with path.open("a", encoding="utf-8") as f:
         f.write(text)
 
+
 @app.command()
-def find_env(file_path: Path):
+def find_env(
+    file_path: Annotated[
+        Path, typer.Argument(help="The path of the file that is being searched")
+    ],
+):
     """
     Check if there is a .env file in the project directory
 
@@ -216,7 +234,7 @@ def find_env(file_path: Path):
         file_path (path): The path of the file that is being searched
 
     Returns:
-        find_env (bool): True if .env is found in the file and false if not 
+        find_env (bool): True if .env is found in the file and false if not
     """
     if ".env" in file_path.read_text(encoding="utf-8"):
         print("There is already a .env file present in your gitignore file")
@@ -235,6 +253,7 @@ def create_gitignore():
     except Exception as e:
         print(f"Gitignore file was not created. Error is {e}")
 
+
 @app.command()
 def safe_env():
     """
@@ -242,8 +261,11 @@ def safe_env():
     """
     has_gitignore, no_of_gitignores = check_gitignore()
     if not has_gitignore:
+        print("Proceeding to create a new gitignore file")
         template = question()
-        create_gitignore()
+        template_url = f"https://raw.githubusercontent.com/github/gitignore/refs/heads/main/{template}.gitignore"
+        urllib.request.urlretrieve(template_url, p / ".gitignore")
+        print("Gitignore file successfully created")
     elif no_of_gitignores == 1:
         if find_env(gitignores[0]):
             return
@@ -253,6 +275,6 @@ def safe_env():
         except Exception as e:
             print(f"Error when trying to add .env: {e}")
 
-    
+
 if __name__ == "__main__":
     app()
