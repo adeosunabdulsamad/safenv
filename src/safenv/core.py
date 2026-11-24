@@ -206,7 +206,13 @@ def check_gitignore():
         print("Pass: There is a gitignore file present")
         return [True, 1]
 
-def join_gitignores(gitignores: Annotated[list[Path], typer.help("List of gitignore files present in the working directory")]):
+
+def join_gitignores(
+    gitignores: Annotated[
+        list[Path],
+        typer.Option(help="List of gitignore files present in the working directory"),
+    ],
+):
     """
     Join multiple gitignore files together to One
 
@@ -214,7 +220,7 @@ def join_gitignores(gitignores: Annotated[list[Path], typer.help("List of gitign
         gitignores (list[path]): List of gitignore files present in the working directory
 
     Returns:
-        gitignore: A single gitignore file 
+        gitignore: A single gitignore file
     """
     pass
 
