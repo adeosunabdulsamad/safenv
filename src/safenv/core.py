@@ -2,11 +2,13 @@ import typer
 from pathlib import Path
 from typing import Annotated
 import urllib.request
+from importlib.metadata import version
+from InquirerPy import inquirer
 
 app = typer.Typer()
 p = Path(".")
 gitignores = list(p.glob("**/*.gitignore"))
-from InquirerPy import inquirer
+__version__ = version("safenv")
 
 options = {
     "AL": None,
